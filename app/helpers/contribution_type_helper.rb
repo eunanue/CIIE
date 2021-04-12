@@ -1,0 +1,2 @@
+module ContributionTypeHelper
+end

@@ -1,0 +1,30 @@
+h3
+  | ¡Hi, #{@user.full_name}!
+
+br
+
+p
+  | You've been added to the paper titled:
+
+p
+  strong
+    | #{paper.id} #{@paper.name}
+
+p
+  | Please login to the CIIE platform to register your data and see the paper's details
+p
+  | You can login using this email address and the following password:
+p
+  | Contraseña: #{@temporary_password}
+
+a href="https://ciietec.mx"
+  | Access to CIIE Platform
+
+p
+  | Sincerely
+p
+  | Comité Científico
+p
+  | 8o Congreso Internacional de Innovación Educativa
+p
+  | Tecnológico de Monterrey

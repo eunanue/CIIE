@@ -1,0 +1,20 @@
+
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Reporte Evaluadores CIIE") do |sheet|
+
+  header = %w(ID_Evaluador Nombre_Completo_Evaluador Correo_Evaluador Folios_Ponencias_Evaluadas Cantidad_Ponencias_Evaluadas ¿Evaluo?)
+  sheet.add_row header
+
+  User.includes(:evaluations).where(evaluator: true).each do |evaluator|
+    evaluations = evaluator.evaluations
+
+    row = [evaluator.id,
+           evaluator.full_name,
+           evaluator.email,
+           evaluations.map(&:id).join(', '),
+           evaluations.count,
+           !evaluations.map(&:incomplete?).all?(true) ? 'Sí' : 'No']
+
+    sheet.add_row row
+  end
+end

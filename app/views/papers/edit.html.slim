@@ -1,0 +1,6 @@
+= render partial: 'shared/breadcrums',
+        locals: {area: 'Ponencia',
+                action: 'Editar',
+                title: 'Editar ponencia'}
+
+= render partial: 'papers/form', locals: {action: :update, http_method: :put}

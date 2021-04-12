@@ -1,0 +1,18 @@
+- controller_name = element.class.name.underscore.pluralize
+
+- if policy(element).edit?
+  = link_to(url_for(controller: controller_name, action: :edit, id: element.id), class: 'action-icon') do
+    i.mdi.mdi-pencil.mr-2
+
+- if policy(element).respond_to?(:evaluate?) && policy(element).evaluate?
+  - evaluation = Evaluation.find_by(paper: element, user: current_user)
+  = link_to(url_for(controller: :evaluations, action: :edit, id: evaluation.id), class: 'action-icon') do
+    i.mdi.mdi-playlist-edit.mr-2.mdi-24px
+
+- if policy(element).respond_to?(:config?) && policy(element).config?
+  = link_to(url_for(controller: :configurations, action: :edit, id: element.id), class: 'action-icon') do
+    i.mdi.mdi-cogs.mr-2
+
+- if policy(element).destroy?
+  a.action-icon href='#' data-toggle='modal' data-target='#delete-modal' data-id="#{element.id}" data-name="#{element.to_s}" data-controller-name="#{controller_name}"
+    i.mdi.mdi-delete.ml-2.text-danger

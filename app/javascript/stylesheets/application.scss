@@ -1,0 +1,28 @@
+@import '~bootstrap/dist/css/bootstrap';
+@import '~bootstrap-datepicker/dist/css/bootstrap-datepicker';
+@import 'app';
+@import 'icons';
+
+.hide-element
+{
+  visibility: hidden;
+}
+
+.field_with_errors
+{
+  input
+  {
+    border: 1px solid red;
+  }
+
+  select
+  {
+    border: 1px solid red;
+  }
+}
+
+.evaluation-status
+{
+  margin-bottom: 0.5em;
+  padding: 0.5em;
+}

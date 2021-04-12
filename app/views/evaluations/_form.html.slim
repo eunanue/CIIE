@@ -1,0 +1,49 @@
+.card
+  .card-body
+    = form_for @evaluation, url: url_for(controller: :evaluations, action: action), html: {method: http_method, role: 'form', class: 'simple-dynamic-form'} do |f|
+      h3.alert-danger.p-4 style="margin-left: -1.5rem; margin-right: -1.5rem; margin-top: -1.5rem"
+        | #{@evaluation.paper.name}
+        a.btn.btn-danger.float-right href="#{@evaluation.paper.file&.url}"
+          | Descargar Ponencia
+
+      h3.mt-4
+        | Rúbrica de evaluación
+      p.font-18
+        | Instrucciones para evaluar: 1 es la calificación más baja y 5 la más alta
+
+      table.table.table-striped.table-bordered
+        thead
+          tr
+            th.font-18
+              | Criterio
+            th.font-18
+              |
+            th.font-18
+              | Calificación
+        tbody
+          = f.fields_for :marks do |ff|
+            tr
+              td.font-18
+                | C#{ff.object.evaluation_criterium.order}
+              td.font-18
+                | #{ff.object.evaluation_criterium.description}
+              td.font-18
+                = ff.number_field :score, class: 'form-control font-18 score-field', min: 1, max: 5
+
+      .text-right
+        span.font-18.mr-2
+          | Puntos:
+        span.point-sum.font-18
+          | 0
+
+      h3.mt-5
+        | Veredicto
+      = f.select :veredict, [['Aceptada', 'true'], ['Rechazada', 'false']], {prompt: 'Seleccione un veredicto'}, class: 'form-control w-50 font-18'
+
+      h3.mt-4
+        | Retroalimentación
+      p.font-18
+        | (En caso de veredicto rechazado, la retroalimentación debe de ser de 250 caracteres.)
+      = f.text_area :feedback, class: 'form-control', style: 'height: 8em;'
+
+      = f.submit 'Guardar cambios', class: 'btn btn-danger mt-5 float-right'

@@ -1,0 +1,46 @@
+= render partial: 'shared/breadcrums',
+        locals: {area: 'Ponencia',
+                action: 'Configurar',
+                title: 'Configurar ponencia'}
+
+- model = @paper
+
+.card.mb-4
+  .card-body
+    = form_for model, url: url_for(controller: :configurations, action: :update), method: :put, html: {class: ''} do |f|
+      h3.alert-danger.p-4.mb-4 style="margin-left: -1.5rem; margin-right: -1.5rem; margin-top: -1.5rem"
+        | #{model.id} #{model.name}
+
+      = f.hidden_field :id, value: model.id
+
+      = f.fields_for :evaluator1 do |ff|
+        .form-group
+          = ff.label :email, 'Correo del Evaluador 1'.html_safe, class: 'control-label'
+          = ff.text_field :email, class: 'form-control'
+          - unless model.errors[:evaluator1]&.empty?
+            div class="text-danger"
+              = model.errors[:evaluator1].join(', ')
+
+      = f.fields_for :evaluator2 do |ff|
+        .form-group
+          = ff.label :email, 'Correo del Evaluador 2'.html_safe, class: 'control-label'
+          = ff.text_field :email, class: 'form-control'
+          - unless model.errors[:evaluator2]&.empty?
+            div class="text-danger"
+              = model.errors[:evaluator2].join(', ')
+
+      = f.fields_for :evaluator3 do |ff|
+        .form-group
+          = ff.label :email, 'Correo del Evaluador 3'.html_safe, class: 'control-label'
+          = ff.text_field :email, class: 'form-control'
+          - unless model.errors[:evaluator3]&.empty?
+            div class="text-danger"
+              = model.errors[:evaluator3].join(', ')
+
+      .mb-4
+
+      button.btn.btn-danger.float-right[type="submit"]
+        | Guardar cambios
+      = link_to url_for(controller: :papers, action: :index) do
+        button.btn.btn-secondary.float-right.mr-3
+          | Regresar

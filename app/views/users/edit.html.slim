@@ -1,0 +1,52 @@
+= render partial: 'shared/breadcrums',
+        locals: {area: 'Mi Perfil',
+                action: 'Editar',
+                title: 'Editar mis datos'}
+
+= form_for @user, url: url_for(controller: :users, action: :update), html: {method: :put,  role: 'form', class: 'simple-dynamic-form'} do |f|
+
+  .from-group
+    = f.label :institution_id, 'Universidad o institución de procedencia'
+    = f.select :institution_id, Institution.all.collect{|i| [i.name, i.id]}, {prompt: 'Selecciona institución'}, {class: 'form-control institution_selector'}
+    - if f.object.errors.include? :institution_id
+      .text-danger.pb-2
+        = f.object.errors[:institution_id].join(',')
+  .extra_institution_fields
+    .from-group.mt-3
+      = f.label :institution_name, 'Nombre de la institución'
+      = f.text_field :institution_name, class: 'form-control'
+      - if f.object.errors.include? :institution_name
+        .text-danger.pb-2
+          = f.object.errors[:institution_name].join(',')
+    .from-group.mt-3
+      = f.label :institution_type_id, 'Tipo de institución'
+      = f.select :institution_type_id, InstitutionType.all.collect{|i| [i.to_s, i.id]}, {}, {class: 'form-control'}
+      - if f.object.errors.include? :institution_type_id
+        .text-danger.pb-2
+          = f.object.errors[:institution_type_id].join(',')
+    .from-group.mt-3
+      = f.label :institution_privacy_id, 'Privada o pública'
+      = f.select :institution_privacy_id, InstitutionPrivacy.all.collect{|i| [i.to_s, i.id]}, {}, {class: 'form-control'}
+      - if f.object.errors.include? :institution_privacy_id
+        .text-danger.pb-2
+          = f.object.errors[:institution_privacy_id].join(',')
+  .from-group.mt-3
+    = f.label :names, 'Nombres'
+    = f.text_field :names, class: 'form-control'
+    - if f.object.errors.include? :names
+      .text-danger.pb-2
+        = f.object.errors[:names].join(',')
+  .from-group.mt-3
+    = f.label :last_names, 'Apellidos'
+    = f.text_field :last_names, class: 'form-control'
+    - if f.object.errors.include? :last_names
+      .text-danger.pb-2
+        = f.object.errors[:last_names].join(',')
+  .from-group.mt-3
+    = f.label :phone, 'Teléfono (Clave País, Clave Nacional, Teléfono)'
+    = f.text_field :phone, class: 'form-control'
+    - if f.object.errors.include? :phone
+      .text-danger.pb-2
+        = f.object.errors[:phone].join(',')
+
+  = f.submit t('paper.save_changes'), class: 'btn btn-danger mt-5 float-right'

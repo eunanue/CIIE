@@ -1,0 +1,138 @@
+.card
+  .card-body
+    = form_for @paper, url: url_for(controller: :papers, action: action), html: {method: http_method,  role: 'form', class: 'simple-dynamic-form'} do |f|
+      h3.alert-danger.p-4 style="margin-left: -1.5rem; margin-right: -1.5rem; margin-top: -1.5rem"
+        | #{t 'paper.the_contribution'}
+
+      .form-group
+        = f.label :name, t('paper.contribution_title')
+        = f.text_field :name, class: "form-control"
+        - if @paper.errors.include? :name
+          .text-danger
+            | #{@paper.errors[:name].join(', ')}
+
+      .form-group
+        = f.label :paper_topic_id, t('paper.topic')
+        = f.select :paper_topic_id, PaperTopic.all.collect { |al| [al.to_s, al.id] }, { prompt: t('paper.select_topic') }, { class: 'form-control topic-selector' }
+        - if @paper.errors.include? :paper_topic_id
+          .text-danger
+            | #{@paper.errors[:paper_topic_id].join(', ')}
+
+      .form-group
+        = f.label :paper_subtopic_id, t('paper.subtopic')
+        - PaperTopic.all.each do |pt|
+          = f.select :paper_subtopic_id, PaperSubtopic.where(paper_topic: pt).collect { |al| [al.to_s, al.id] }, { prompt: t('paper.select_subtopic') }, { class: "form-control subtopic-selector subtopic-#{pt.id}-selector" }
+        p.no_topic_selected_warning.text-danger
+          | #{t('paper.specify_topic_warning')}
+        - if @paper.errors.include? :paper_subtopic_id
+          .text-danger
+            | #{@paper.errors[:paper_subtopic_id].join(', ')}
+
+      .form-group.subtopic_other_fields
+        = f.label :subtopic_other, t('paper.specify_subtopic')
+        = f.text_field :subtopic_other, class: 'form-control'
+        - if @paper.errors.include? :subtopic_other
+          .text-danger
+            | #{@paper.errors[:subtopic_other].join(', ')}
+
+      .form-group
+        = f.label :contribution_type_id, t('paper.contribution_type')
+        = f.select :contribution_type_id, ContributionType.where(edtech: false).collect{|ct| [ct.to_s, ct.id]}, {prompt: t('paper.select_contribution_type')}, {class: 'form-control contribution_type_select none-edtech-contributions'}
+        = f.select :contribution_type_id, ContributionType.where(edtech: true).collect { |ct| [ct.to_s, ct.id] }, { prompt: t('paper.select_contribution_type') }, { class: 'form-control contribution_type_select edtech-contributions' }
+        - if @paper.errors.include? :contribution_type_id
+          .text-danger
+            | #{@paper.errors[:contribution_type_id].join(', ')}
+
+      .form-group
+        a.btn.btn-dark.download-template-button href="#" target="_blank"
+          | #{t 'paper.download_template'}
+
+      .form-group
+        = f.label :academic_level_id, t('paper.academic_level')
+        = f.select :academic_level_id, AcademicLevel.all.collect{|al| [al.to_s, al.id]}, {prompt: t('paper.select_academic_level')}, {class: 'form-control academic_level_selector'}
+        - if @paper.errors.include? :academic_level_id
+          .text-danger
+            | #{@paper.errors[:academic_level_id].join(', ')}
+
+      .form-group.extra_academic_level_fields
+        = f.label :academic_level_other, t('paper.specify_academic_level')
+        = f.text_field :academic_level_other, class: "form-control"
+        - if @paper.errors.include? :academic_level_other
+          .text-danger
+            | #{@paper.errors[:academic_level_other].join(', ')}
+
+      .form-group
+        = f.label :academic_area_id, t('paper.academic_area')
+        = f.select :academic_area_id, AcademicArea.all.collect{|al| [al.to_s, al.id]}, {prompt: t('paper.select_academic_area')}, {class: 'form-control academic_area_selector'}
+        - if @paper.errors.include? :academic_area_id
+          .text-danger
+            | #{@paper.errors[:academic_area_id].join(', ')}
+
+      .form-group.extra_academic_area_fields
+        = f.label :academic_area_other, t('paper.specify_academic_area')
+        = f.text_field :academic_area_other, class: "form-control"
+        - if @paper.errors.include? :academic_area_other
+          .text-danger
+            | #{@paper.errors[:academic_area_other].join(', ')}
+
+      .form-group
+        = f.label :keywords, t('paper.keywords')
+        = f.text_field :keywords, class: 'form-control'
+        - if @paper.errors.include? :keywords
+          .text-danger
+            | #{@paper.errors[:keywords].join(', ')}
+
+      .form-group
+        = f.label :brief, t('paper.summary')
+        = f.text_area :brief, class: 'form-control'
+        - if @paper.errors.include? :brief
+          .text-danger
+            | #{@paper.errors[:brief].join(', ')}
+
+      .form-group
+        = f.label :used_before_option_id, t('paper.presented_work')
+        = f.select :used_before_option_id, UsedBeforeOption.all.collect{|ubo| [ubo.to_s, ubo.id]}, {}, class: 'form-control'
+        - if @paper.errors.include? :used_before_option_id
+          .text-danger
+            | #{@paper.errors[:used_before_option_id].join(', ')}
+
+      .form-group
+        = f.label :relevance, t('paper.proposal_consideration')
+        = f.text_area :relevance, class: 'form-control'
+        - if @paper.errors.include? :relevance
+          .text-danger
+            | #{@paper.errors[:relevance].join(', ')}
+
+      h3.alert-danger.p-4.collaborator_section_title style="margin-left: -1.5rem; margin-right: -1.5rem;"
+        | #{t('menu.collaborators')}
+
+      .nested-anchor
+        = f.fields_for :users, f.object.paper_users.map(&:user) do |builder|
+          = render 'papers/user_fields', f: builder
+      = link_to_add_fields t('paper.add_collaborator'), f, :users, 'btn btn-primary mt-0 new-collaborator-field-link hide-element'
+
+      .row.pt-0.mt-0.mb-4
+        = label_tag '', t('paper.search_by_email'), class: 'col-2 mt-1'
+        .col-6
+          = text_field_tag t('menu.collaborators'), '', {class: 'form-control search-by-email-field'}
+        .col-3
+          button.btn.btn-dark.add-collaborator-button
+            | #{t('paper.add_collaborator')}
+
+      h3.alert-danger.p-4 style="margin-left: -1.5rem; margin-right: -1.5rem;"
+        | #{t('paper.upload_contribution')}
+
+      .form_group
+        = f.label :file, t('paper.only_word_documents')
+        - if f.object.persisted? && f.object.file&.url
+          p
+            | Cargado actualmente: &nbsp;
+            = f.object.download
+        = f.file_field :file, class: 'form-control'
+        - if @paper.errors.include? :file
+          .text-danger
+            | #{@paper.errors[:file].join(', ')}
+
+      = f.submit t('paper.save_changes'), class: 'btn btn-danger mt-5 float-right'
+
+

@@ -1,0 +1,93 @@
+
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Reporte CIIE") do |sheet|
+
+  header = %w(ID Estatus_de_Propuesta Título Tipo Nombres Apellidos Email Institución Institución_Otro Institución_Privacidad Institución_Tipo País Estado Nivel_Académico Área_Académica Tema Subtema Palabras_Clave Resumen Estatus_Trabajo Relevancia Estatus_Evaluacion Folio Fecha_Registro)
+  (1..3).each do |evaluator_index|
+    header.concat ["Evaluador_#{evaluator_index}_ID",
+                   "Evalador_#{evaluator_index}_Nombre_Completo",
+                   "Evaluador_#{evaluator_index}_Email",
+                   "Evaluacion_#{evaluator_index}_Veredicto",
+                   "Evaluacion_#{evaluator_index}_Puntos_Totales",
+                   "Evaluacion_#{evaluator_index}_Retroalimentacion"]
+
+    (1..10).each do |criterium_index|
+      header << "Evaluacion_#{evaluator_index}_Criterio_#{criterium_index}"
+    end
+  end
+
+  (1..10).each do |index|
+    header.concat ["Colaborador_#{index}_Nombres",
+               "Colaborador_#{index}_Apellidos",
+               "Colaborador_#{index}_Email",
+               "Colaborador_#{index}_Institución",
+               "Colaborador_#{index}_Institución_Otro",
+               "Colaborador_#{index}_Institución_Privacidad",
+               "Colaborador_#{index}_Institución_Tipo",
+               "Colaborador_#{index}_País",
+               "Colaborador_#{index}_Estado"]
+  end
+  sheet.add_row header
+
+  Paper.where(generation: '2021').each do |paper|
+    row = [paper.id,
+           paper.overall_status,
+           paper.name,
+           paper.contribution_type,
+           paper.owner.names,
+           paper.owner.last_names,
+           paper.owner.email,
+           paper.owner.institution,
+           paper.owner.institution_name,
+           paper.owner.institution_privacy,
+           paper.owner.institution_type,
+           paper.owner.country,
+           paper.owner.state,
+           paper.academic_level,
+           paper.academic_area,
+           paper.paper_topic,
+           paper.paper_subtopic,
+           paper.keywords,
+           paper.brief,
+           paper.used_before_option,
+           paper.relevance,
+           paper.evaluation_status_report,
+           paper.unique_number,
+           paper.created_at]
+
+    (1..3).each do |evaluation_index|
+      evaluation = paper.evaluation_by_index(evaluation_index)
+
+      if evaluation
+        row.concat [evaluation.user.id,
+                    evaluation.user.full_name,
+                    evaluation.user.email,
+                    evaluation.veredict_for_report,
+                    evaluation.total_points,
+                    evaluation.feedback]
+
+        EvaluationCriterium.where(contribution_type: paper.contribution_type).order(order: :asc).each do |ec|
+          row << evaluation.marks.find_by(evaluation_criterium: ec).score
+        end
+      else
+        (1..16).each do |blank_index|
+          row << ""
+        end
+      end
+    end
+
+    paper.users.each do |user|
+      row.concat [user.names,
+              user.last_names,
+              user.email,
+              user.institution,
+              user.institution_name,
+              user.institution_privacy,
+              user.institution_type,
+              user.country,
+              user.state]
+    end
+
+    sheet.add_row row
+  end
+end

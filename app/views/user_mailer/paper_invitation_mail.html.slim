@@ -1,0 +1,8 @@
+- if @paper.is_owner?(@user)
+  = render partial: 'owner_new_paper', locals: {user: @user, paper: @paper}
+- else
+  - if @user.needs_invitation?
+    = render partial: 'unregistered_new_paper', locals: {user: @user, paper: @paper, temporary_password: @temporary_password}
+  - else
+    = render partial: 'registered_new_paper', locals: {user: @user, paper: @paper}
+

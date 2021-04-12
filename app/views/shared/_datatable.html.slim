@@ -1,0 +1,28 @@
+.row
+  .col-md-12.col-xl-12
+    .card
+      .card-body
+        .table-responsive-md
+          table.table.table-striped.table-centered.mb-0.font-16
+            thead
+              tr
+                - fields.each do |field, name|
+                  th
+                    | #{name}
+                th
+                  | #{t('general.actions')}
+            tbody
+              - list.each do |element|
+                tr
+                  - fields.each do |f, name|
+                    - if f == :evaluation_status_for_evaluator
+                      td
+                        div style="max-width: 400px;"
+                          | #{element.evaluation_status_for_evaluator(current_user)}
+                    - else
+                      td
+                        div style="max-width: 400px;"
+                          | #{element.send(f)}
+                  td.table-action
+                    div style="min-width: 120px;"
+                      = render partial: 'shared/actions', locals: {element: element}

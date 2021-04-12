@@ -1,0 +1,59 @@
+- if current_user.must_complete_profile?
+  h4.alert.alert-warning
+    | #{t('user.complete_profile')}
+    a href="/users/#{current_user.id}/edit"
+      |  #{t('user.click_here')}
+.row
+  .col-12
+    .page-title-box
+      .page-title-right
+        ol.breadcrumb.m-0
+          li.breadcrumb-item
+            a.text-danger[href="javascript: void(0);"]
+              | CIIE
+          li.breadcrumb-item
+            a.text-danger[href="javascript: void(0);"]
+              | #{t 'menu.papers'}
+          li.breadcrumb-item.active
+            | #{t 'menu.list'}
+      h4.page-title
+        | #{t 'paper.current_papers'} #{@generation}
+
+.row.mb-2
+  .col-sm-8
+    a href="/papers/new"
+      button.btn.btn-danger.btn-rounded.mb-3[type="button"]
+        i.mdi.mdi-plus
+        | #{t 'paper.register_paper'}
+  .col-sm-4
+    - if current_user.admin?
+      .d-flex
+        = select_tag :filter_by_generation, options_for_select(['2021', '2020']), class: 'form-control filter-by-generation-select'
+        a href="#" class="btn btn-primary filter-by-generation-button"
+          | Filtrar
+
+- if current_user.admin?
+  = render partial: 'shared/datatable',
+          locals: {list: @papers.uniq.sort_by(&:id),
+                  fields: {id: 'ID',
+                          name: t('user.names'),
+                          owner: t('paper.owner'),
+                          registration_date: t('paper.registration_date'),
+                          evaluation_status: "Evaluaciones"}}
+- elsif current_user.evaluator?
+  = render partial: 'shared/datatable',
+          locals: {list: @papers.uniq.sort_by(&:id),
+                  fields: {id: 'ID',
+                          name: t('user.names'),
+                          owner: t('paper.owner'),
+                          registration_date: t('paper.registration_date'),
+                          evaluation_status_for_evaluator: "Evaluación"}}
+- else
+  = render partial: 'shared/datatable',
+          locals: {list: @papers.uniq.sort_by(&:id),
+                  fields: {id: 'ID',
+                          name: t('user.names'),
+                          owner: t('paper.owner'),
+                          registration_date: t('paper.registration_date')}}
+
+= render partial: 'shared/delete_modal'

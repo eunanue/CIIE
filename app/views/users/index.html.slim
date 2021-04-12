@@ -1,0 +1,34 @@
+= render partial: 'shared/breadcrums', locals: {area: 'Usuarios', action: 'Listado', title: 'Lista de usuarios registrados'}
+
+.row
+  .col-md-12
+    .table-responsive.table-striped
+      table.clients-table.table.table-hover.m-0
+        thead
+          tr
+            th
+              | Nombre completo
+            th
+              | Email
+            th
+              | Rol
+            th.text-right
+              | Acciones
+        tbody
+          - @users.where(evaluator: @evaluator).sort_by{|u| u.full_name.downcase}.each do |user|
+            tr
+              td.py-3
+                | #{user.id}
+              td.py-3
+                | #{user.full_name}
+              td.py-3
+                | #{user.email}
+              td.py-3
+                | #{user.admin? ? 'Administrador' : (user.evaluator ? 'Evaluador' : 'Colaborador')}
+              td.py-3 width="20%"
+                = link_to url_for(controller: :users, action: :impersonate, id: user.id), method: :post do
+                  button type="button" class="btn icon-btn btn-danger float-right ml-2"
+                    span.mdi.mdi-face-profile
+                = link_to url_for(controller: :users, action: :edit, id: user.id), method: :get do
+                  button type="button" class="btn icon-btn btn-danger float-right ml-2"
+                    span.mdi.mdi-pen.mdi-18px

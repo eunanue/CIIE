@@ -1,0 +1,90 @@
+.container.nested-item.my-2.mx-0.user-paper-container
+  .alert-success.found-professor.col-12.p-2.d-none.mb-2
+    | #{t('user.assigned_user')}
+
+  .alert-warning.d-none.needs-registration-professor.col-12.d-none.mb-2.p-2
+    | #{t('user.unregistered_message')}
+
+  = f.hidden_field :spv, value: 1
+  = f.hidden_field :id, class: 'id-field'
+
+  .form-group
+    = f.label :email, t('user.email')
+    = f.text_field :email, class: 'form-control email-field'
+    - if f.object.errors.include? :email
+      .text-danger
+        | Requerido
+
+  .form-group
+    = f.label :names, t('user.names')
+    = f.text_field :names, class: 'form-control names-field'
+    - if f.object.errors.include? :names
+      .text-danger
+        | #{f.object.errors[:names].join(', ')}
+
+  .form-group
+    = f.label :last_names, t('user.last_names')
+    = f.text_field :last_names, class: 'form-control last-names-field'
+    - if f.object.errors.include? :last_names
+      .text-danger
+        | #{f.object.errors[:last_names].join(', ')}
+
+  .form-group
+    = f.label :phone, t('user.phone')
+    = f.text_field :phone, class: 'form-control phone-field'
+
+  .from-group.mt-3
+    = f.label :country_id, t('user.country')
+    = f.select :country_id, Country.all.collect{|i| [i.to_s, i.id]}, {prompt: t('general.select')}, {class: 'form-control country-select-paper'}
+    - if f.object.errors.include? :country_id
+      .text-danger.pb-2
+        = f.object.errors[:country_id].join(',')
+
+  .from-group.mt-3.state-select-paper
+    = f.label :state_id, t('user.state')
+    = f.select :state_id, State.all.order(name: :asc).collect{|i| [i.to_s, i.id]}, {prompt: t('general.select')}, {class: 'form-control'}
+    - if f.object.errors.include? :state_id
+      .text-danger.pb-2
+        = f.object.errors[:state_id].join(',')
+
+  .form-group.mt-3
+    = f.label :institution_id, t('user.institution')
+    = f.select :institution_id, Institution.all.collect{|i| [i.to_s, i.id]}, {prompt: 'Seleccionar institución'}, {class: 'form-control institution-select-paper'}
+
+  .paper_extra_institution_fields
+    .from-group.mt-3
+      = f.label :institution_name, t('user.institution_name')
+      = f.text_field :institution_name, class: 'form-control'
+      - if f.object.errors.include? :institution_name
+        .text-danger.pb-2
+          = f.object.errors[:institution_name].join(',')
+
+    .from-group.mt-3
+      = f.label :institution_type_id, t('user.institution_type')
+      = f.select :institution_type_id, InstitutionType.all.collect{|i| [i.to_s, i.id]}, {prompt: t('general.select')}, {class: 'form-control'}
+        - if f.object.errors.include? :institution_type_id
+          .text-danger.pb-2
+            = f.object.errors[:institution_type_id].join(',')
+
+    .from-group.mt-3
+      = f.label :institution_privacy_id, t('user.private_public')
+      = f.select :institution_privacy_id, InstitutionPrivacy.all.collect{|i| [i.to_s, i.id]}, {prompt: t('general.select')}, {class: 'form-control'}
+      - if f.object.errors.include? :institution_privacy_id
+        .text-danger.pb-2
+          = f.object.errors[:institution_privacy_id].join(',')
+
+  .from-group.mt-3.paper_code_field
+    = f.label :code, t('user.code')
+    = f.text_field :code, placeholder: 'Formato: L0xxxxxxx', class: 'form-control'
+    - if f.object.errors.include? :code
+      .text-danger.pb-2
+        = f.object.errors[:code].join(',')
+
+  a.remove_fields.d-block href="#" style="text-align: right"
+    i.mdi.mdi-delete.text-danger.remove-nested-icon.pt-3 style="font-size: 28px;"
+    span.text-danger.font-16
+      | Eliminar
+
+  = f.hidden_field :_destroy, value: 0, class: 'destroy-hidden-field'
+
+  hr

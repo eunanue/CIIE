@@ -1,0 +1,16 @@
+#delete-modal.modal.fade[tabindex="-1" role="dialog" aria-labelledby="danger-header-modalLabel" aria-hidden="true"]
+  .modal-dialog
+    .modal-content
+      .modal-header.modal-colored-header.bg-danger
+        h4#danger-header-modalLabel.modal-title
+          | Eliminar
+        button.close[type="button" data-dismiss="modal" aria-hidden="true"]
+          | ×
+      .modal-body
+        p.message
+          | ''
+      .modal-footer
+        button.btn.btn-light.cancel-button[type="button" data-dismiss="modal"]
+          | Cancelar
+        button.btn.btn-danger.delete-trigger[type="button"]
+          | Eliminar

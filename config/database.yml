@@ -1,0 +1,22 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  username: 
+  password: 
+  host: localhost
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: ciie_development
+
+
+test:
+  <<: *default
+  database: ciie_test
+
+production:
+  <<: *default
+  database: ciie_production
+  username: ciie
+  password: <%= ENV['CIIE_DATABASE_PASSWORD'] %>

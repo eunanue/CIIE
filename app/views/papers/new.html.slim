@@ -1,0 +1,9 @@
+= render partial: 'shared/breadcrums',
+        locals: {area: t('menu.papers'),
+                action: t('menu.register'),
+                title: t('paper.new_paper')}
+
+h5.alert-warning.p-2
+  | #{t 'paper.user_account_warning'}
+
+= render partial: 'papers/form', locals: {action: :create, http_method: :post}
