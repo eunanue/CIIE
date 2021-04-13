@@ -22,15 +22,20 @@ gem 'wkhtmltopdf-binary'
 gem 'pretender'
 gem 'caxlsx'
 gem 'axlsx_rails'
+gem 'unicorn'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
 
 group :development do
-  gem 'capistrano-rails'
-  gem 'capistrano-rvm'
-  gem 'capistrano3-puma'
+  gem 'capistrano', '3.16.0'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails', github: 'capistrano/rails'
+  gem 'capistrano-rails-console'
+  gem 'capistrano-sidekiq'
+  gem 'rvm1-capistrano3', require: false
+  gem 'airbrussh', require: false
   gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'spring'

@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.4.0'
+lock '3.16.0'
 
 def deploysecret(key)
   @deploy_secrets_yml ||= YAML.load_file('config/deploy-secrets.yml')[fetch(:stage).to_s]
@@ -20,7 +20,7 @@ set :revision, `git rev-parse --short #{fetch(:branch)}`.strip
 
 set :log_level, :info
 set :pty, true
-set :use_sudo, false
+set :use_sudo, true
 
 set :linked_files, %w{config/database.yml config/secrets.yml}
 set :linked_dirs, %w{log tmp public/system public/assets}
