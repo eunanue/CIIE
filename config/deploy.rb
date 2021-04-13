@@ -22,7 +22,7 @@ set :log_level, :info
 set :pty, true
 set :use_sudo, true
 
-set :linked_files, %w{config/database.yml config/secrets.yml}
+set :linked_files, %w{config/database.yml config/secrets.yml config/master.key}
 set :linked_dirs, %w{log tmp public/system public/assets}
 
 set :keep_releases, 10
