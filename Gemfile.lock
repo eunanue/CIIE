@@ -124,6 +124,10 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    dotenv (2.7.6)
+    dotenv-rails (2.7.6)
+      dotenv (= 2.7.6)
+      railties (>= 3.2)
     em-websocket (0.5.2)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
@@ -400,6 +404,7 @@ DEPENDENCIES
   carrierwave (>= 2.0.0.rc, < 3.0)
   caxlsx
   devise
+  dotenv-rails
   fog-core
   fog-google (~> 1.9.1)
   guard-livereload (~> 2.5)
