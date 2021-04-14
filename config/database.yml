@@ -1,5 +1,5 @@
 default: &default
-  adapter: postgresql
+  adapter: postgres
   encoding: unicode
   username: 
   password: 
