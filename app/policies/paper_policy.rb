@@ -4,11 +4,11 @@ class PaperPolicy < ApplicationPolicy
   end
 
   def new?
-    user.admin? #|| user.professor?
+    user.admin? || user.professor?
   end
 
   def create?
-    user.admin? #|| user.professor?
+    user.admin? || user.professor?
   end
 
   def show?
@@ -16,11 +16,11 @@ class PaperPolicy < ApplicationPolicy
   end
 
   def edit
-    user.admin? #|| (user.professor? && record.participates?(user))
+    user.admin? || (user.professor? && record.participates?(user))
   end
 
   def update?
-    user.admin? #|| (user.professor? && record.participates?(user))
+    user.admin? || (user.professor? && record.participates?(user))
   end
 
   def destroy?
