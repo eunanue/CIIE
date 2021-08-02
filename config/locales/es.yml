@@ -31,7 +31,7 @@ es:
   paper:
     new_paper: 'Nueva ponencia'
     current_papers: 'Ponencias en curso'
-    register_paper: 'Registrar ponencia'
+    register_paper: 'Registrar ponencia:'
     the_contribution: 'Información de la contribución'
     contribution_title: 'Título de la contribución'
     contribution_type: 'Tipo de la contribución'
