@@ -22,9 +22,9 @@
 .row.mb-2
   .col-sm-8
     a href="/papers/new"
-      button.btn.btn-danger.btn-rounded.mb-3[type="button"]
+       button.btn.btn-danger.btn-rounded.mb-3[type="button" disabled="disabled"]
         i.mdi.mdi-plus
-        | #{t 'paper.register_paper'}
+        | #{t 'paper.register_paper'} 
   .col-sm-4
     - if current_user.admin?
       .d-flex
